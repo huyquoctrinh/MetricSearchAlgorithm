@@ -4,7 +4,7 @@ from utils.draw_map import *
 from algo.DepthFirstSearch import *
 from algo.BreadthFirstSearch import *
 from algo.UniformCostSearch import *
-
+from algo.GreedyBestFirstSearch import *
 # readfile tips:
 # read 1 number in a line: int(fName.readline())
 # read many number in a line: [int(x) for x in next(f).split()]
@@ -58,5 +58,5 @@ for i in range(len(maze)):
         if (i == 0 or j == 0 or i == mazeRow - 1 or j == mazeCol - 1) and maze[i][j] == " ":
             end = (i, j)
     visited.append(tmp)
-path = ucsPath(maze, start, end, bombs)
+path = gbfsPath(maze, visited, start, end)
 visualize_maze(maze, bombs, start, end, path)

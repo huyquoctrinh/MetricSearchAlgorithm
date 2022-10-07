@@ -15,7 +15,7 @@ def printArray(a):
             print(a[i][j], end = ' ')
         print()
 
-def ucsPath(graph, start, end, rewards):
+def ucsPath(graph, start, end, rewards=[]):
     dist = [[10**9] * len(graph[i]) for i in range(len(graph))]
     cost = [[1] * len(graph[i]) for i in range(len(graph))]
     track = [[(0,0)] * len(graph[i]) for i in range(len(graph))]
@@ -42,3 +42,4 @@ def ucsPath(graph, start, end, rewards):
                     pq.put((w + cost[dr][dc], (dr, dc)))
                     track[dr][dc] = (u, v)
     return []
+
