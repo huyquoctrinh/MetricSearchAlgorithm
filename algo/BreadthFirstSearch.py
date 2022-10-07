@@ -4,7 +4,7 @@ import queue
 def bfsPath(graph, visited, start, end, path = []):
     q = queue.Queue()
     q.put(start)
-    track = [[(0,0)] * len(graph[i]) for i in range(len(graph))]
+    track = [[(-1,-1)] * len(graph[i]) for i in range(len(graph))]
     visited[start[0]][start[1]] = True
     while not q.empty():
         x, y = q.get()

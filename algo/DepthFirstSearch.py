@@ -2,7 +2,7 @@ from algo.graphAsset import *
 
 def dfsPath(graph, visited, start, end, path = []):
     q = [start]
-    track = [[(0,0)] * len(graph[i]) for i in range(len(graph))]
+    track = [[(-1, -1)] * len(graph[i]) for i in range(len(graph))]
     visited[start[0]][start[1]] = True
     while len(q) != 0:
         x, y = q.pop()

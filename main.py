@@ -5,6 +5,7 @@ from algo.DepthFirstSearch import *
 from algo.BreadthFirstSearch import *
 from algo.UniformCostSearch import *
 from algo.GreedyBestFirstSearch import *
+from algo.ASearch import *
 # readfile tips:
 # read 1 number in a line: int(fName.readline())
 # read many number in a line: [int(x) for x in next(f).split()]
@@ -18,10 +19,10 @@ from algo.GreedyBestFirstSearch import *
 
 
 bombs = [
-(3, 6, -3),
-(5, 14, -1),
-(6, 5, -2),
-(7, 5, -4)
+(3, 6, -10),
+(5, 14, -15),
+(6, 5, -20),
+(7, 5, -14)
 ]
 maze = ["xxxxxxxxxxxxxxxxxxxxxx",
 "x   x   xx xx        x",
@@ -58,5 +59,5 @@ for i in range(len(maze)):
         if (i == 0 or j == 0 or i == mazeRow - 1 or j == mazeCol - 1) and maze[i][j] == " ":
             end = (i, j)
     visited.append(tmp)
-path = gbfsPath(maze, visited, start, end)
+path = a_star_algorithm(maze, start, end)
 visualize_maze(maze, bombs, start, end, path)

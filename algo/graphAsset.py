@@ -6,7 +6,7 @@ def findPath(track, start, end):
     u, v = end[0], end[1]
     while True:
         path.append((u,v))
-        if track[u][v] == (0,0):
+        if track[u][v] == (-1,-1):
             return path[::-1]
         u, v = track[u][v]
     return path
