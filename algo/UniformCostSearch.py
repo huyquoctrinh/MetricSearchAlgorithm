@@ -8,6 +8,12 @@ class Point:
         self.v = v
     def __lt__(self, other):
         return self.dist < other.dist
+    
+def printArray(a):
+    for i in range(len(a)):
+        for j in range(len(a[i])):
+            print(a[i][j], end = ' ')
+        print()
 
 def ucsPath(graph, start, end, rewards):
     dist = [[10**9] * len(graph[i]) for i in range(len(graph))]
@@ -20,22 +26,19 @@ def ucsPath(graph, start, end, rewards):
     cols = len(graph[0])
     dist[u][v] = 0
     pq = queue.PriorityQueue()
-    pq.put(Point(0, u, v))
+    pq.put((0, start))
+    visited = []
     while not pq.empty():
-        point = pq.get()
-        w, u, v = point.dist, point.u, point.v
-        if w > dist[u][v]:
-            continue
-        if u == end[0] and v == end[1]:
+        w, point = pq.get()
+        visited.append(point)
+        if point == end:
             return findPath(track, start, end)
-
+        u, v = point
         for i in range(4):
             dr = u + dx[i]
             dc = v + dy[i]
             if dr in range(rows) and dc in range(cols) and graph[dr][dc] != 'x':
-                if w + cost[dr][dc] < dist[dr][dc]:
-                    dist[dr][dc] = w + cost[dr][dc]
-                    pq.put(Point(dist[dr][dc], dr, dc))
+                if (dr, dc) not in visited:
+                    pq.put((w + cost[dr][dc], (dr, dc)))
                     track[dr][dc] = (u, v)
-                    cost[dr][dc] = 1 if cost[dr][dc] == 1 else (abs(cost[dr][dc]) + 1)
     return []
