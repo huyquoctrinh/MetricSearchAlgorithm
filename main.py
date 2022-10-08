@@ -47,6 +47,8 @@ maze = ["xxxxxxxxxxxxxxxxxxxxxx",
 mazeRow = len(maze)
 mazeCol = len(maze[0])
 visited = []
+start = None
+end = None
 for i in range(len(maze)):
     tmp = []
     for j in range(len(maze[i])):
@@ -59,5 +61,5 @@ for i in range(len(maze)):
         if (i == 0 or j == 0 or i == mazeRow - 1 or j == mazeCol - 1) and maze[i][j] == " ":
             end = (i, j)
     visited.append(tmp)
-path = a_star_algorithm(maze, start, end)
+path = a_star_algorithm(maze, start, end, bombs)
 visualize_maze(maze, bombs, start, end, path)

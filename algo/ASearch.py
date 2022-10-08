@@ -1,8 +1,13 @@
 from algo.graphAsset import *
 import queue
 
-def h(point, end):
-    return abs(point[0] - end[0]) + abs(point[1] - end[1])
+def heuristic2(p1, p2, rewards):
+    nearest_reward = 10**9
+    for u, v, w in rewards:
+        dist = abs(p1[0]-u) + abs(p1[1]-v) 
+        if dist < nearest_reward:
+            nearest_reward = dist
+    return abs(p1[0]-p2[0]) + abs(p1[1]-p2[1]) + nearest_reward
 
 def a_star_algorithm(graph, start_node, end, rewards=[]):
     # open_list is a list of nodes which have been visited, but who's neighbors
@@ -27,7 +32,7 @@ def a_star_algorithm(graph, start_node, end, rewards=[]):
 
         # find a node with the lowest value of f() - evaluation function
         for v in open_list:
-            if n == None or g[v[0]][v[1]] + h(v, end) < g[n[0]][n[1]] + h(n, end):
+            if n == None or g[v[0]][v[1]] + heuristic2(v, end, rewards) < g[n[0]][n[1]] + heuristic2(n, end, rewards):
                 n = v
 
         if n == None:
