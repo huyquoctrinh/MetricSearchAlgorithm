@@ -27,10 +27,10 @@ def ucsPath(graph, start, end, rewards=[]):
     dist[u][v] = 0
     pq = queue.PriorityQueue()
     pq.put((0, start))
-    visited = []
+    visited = [start]
     while not pq.empty():
         w, point = pq.get()
-        visited.append(point)
+        
         if point == end:
             return findPath(track, start, end)
         u, v = point
@@ -39,6 +39,7 @@ def ucsPath(graph, start, end, rewards=[]):
             dc = v + dy[i]
             if dr in range(rows) and dc in range(cols) and graph[dr][dc] != 'x':
                 if (dr, dc) not in visited:
+                    visited.append((dr,dc))
                     pq.put((w + cost[dr][dc], (dr, dc)))
                     track[dr][dc] = (u, v)
     return []

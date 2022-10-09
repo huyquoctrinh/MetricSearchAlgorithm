@@ -19,22 +19,31 @@ from algo.ASearch import *
 
 
 bombs = [
-(3, 6, -10),
-(5, 14, -15),
-(6, 5, -20),
-(7, 5, -14)
+(4,4,-100),
+(6,17,-10)
 ]
-maze = ["xxxxxxxxxxxxxxxxxxxxxx",
-"x   x   xx xx        x",
-"      x     xxxxxxxxxx",
-"x x   +xx  xxxx xxx xx",
-"x x   x x xx   xxxx  x",
-"x          xx +xx  x x",
-"xxxxx+x x      xx  x x",
-"xxxxx+xxx  x x  xx   x",
-"x          x x Sx x  x",
-"xxxxx x  x x x     x x",
-"xxxxxxxxxxxxxxxxxxxxxx"]
+rewards = bombs.copy()
+maze = [
+"xxxxxxxxxxxxxxxxx xxxxxxxxxxx",
+"x                           x",
+"x                           x",
+"x                           x",
+"x   +                       x",
+"x                           x",
+"x                +          x",
+"x                           x",
+"x      xxxxxxxx             x",
+"x      x      x             x",
+"x      x      x             x",
+"x                           x",
+"x         S                 x",
+"x                           x",
+"x                           x",
+"x                           x",
+"x                           x",
+"x                           x",
+"x                           x",
+"xxxxxxxxxxxxxxxxxxxxxxxxxxxxx"]
 
 # with open('maze.txt', 'r') as f:
 #     nBombs = int(f.readline())
@@ -61,5 +70,31 @@ for i in range(len(maze)):
         if (i == 0 or j == 0 or i == mazeRow - 1 or j == mazeCol - 1) and maze[i][j] == " ":
             end = (i, j)
     visited.append(tmp)
-path = a_star_algorithm(maze, start, end, bombs)
-visualize_maze(maze, bombs, start, end, path)
+print("select algo: \n"
+    "1: bfs\n"
+    "2: dfs\n"
+    "3: uniform\n"
+    "4: greedy\n"
+    "5: astar\n")
+print("choose:")
+type = int(input())
+if type == 1:
+    path = bfsPath(maze, visited, start, end)
+elif type == 2:
+    path = dfsPath(maze, visited, start, end)
+elif type == 3:
+    print("include reward? [yes/no]: ")
+    s = input()
+    if s == "yes":
+        path = ucsPath(maze, start, end, bombs)
+    else:
+        path = ucsPath(maze, start, end)
+else:
+    print("include reward? [yes/no]: ")
+    s = input()
+    if s == "yes":
+        path = gbfsPath(maze, start, end, bombs)
+    else:
+        path = gbfsPath(maze, start, end)
+
+visualize_maze(maze, rewards, start, end, path)
