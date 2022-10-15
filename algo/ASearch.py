@@ -64,3 +64,6 @@ def a_star_algorithm(graph, start_node, end, rewards=[]):
 
     print('Path does not exist!')
     return None
+
+# def aStar(graph, start, end, rewards=[]:
+#     open = []

@@ -1,5 +1,7 @@
-dx = [1, 0, 0, -1]
-dy = [0, 1, -1, 0]
+from copy import copy, deepcopy
+
+dx = [-1, 1, 0, 0]
+dy = [0, 0, 1, -1]
 
 def findPath(track, start, end):
     path = []

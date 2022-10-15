@@ -18,32 +18,53 @@ from algo.ASearch import *
 #     return
 
 
+# bombs = [
+# (4,4,-100),
+# (6,17,-10)
+# ]
+
 bombs = [
-(4,4,-100),
-(6,17,-10)
+    (3, 6, -10),
+(5, 14, -15),
+(6, 5 ,-20),
+(7, 5, -14),
 ]
 rewards = bombs.copy()
+# maze = [
+# "xxxxxxxxxxxxxxxxx xxxxxxxxxxx",
+# "x                           x",
+# "x                           x",
+# "x                           x",
+# "x   +                       x",
+# "x                           x",
+# "x                +          x",
+# "x                           x",
+# "x      xxxxxxxx             x",
+# "x      x      x             x",
+# "x      x      x             x",
+# "x                           x",
+# "x         S                 x",
+# "x                           x",
+# "x                           x",
+# "x                           x",
+# "x                           x",
+# "x                           x",
+# "x                           x",
+# "xxxxxxxxxxxxxxxxxxxxxxxxxxxxx"]
+
 maze = [
-"xxxxxxxxxxxxxxxxx xxxxxxxxxxx",
-"x                           x",
-"x                           x",
-"x                           x",
-"x   +                       x",
-"x                           x",
-"x                +          x",
-"x                           x",
-"x      xxxxxxxx             x",
-"x      x      x             x",
-"x      x      x             x",
-"x                           x",
-"x         S                 x",
-"x                           x",
-"x                           x",
-"x                           x",
-"x                           x",
-"x                           x",
-"x                           x",
-"xxxxxxxxxxxxxxxxxxxxxxxxxxxxx"]
+"xxxxxxxxxxxxxxxxxxxxxx",
+"x   x   xx xx        x",
+"      x     xxxxxxxxxx",
+"x x   +xx  xxxx xxx xx",
+"x x   x x xx   xxxx  x",
+"x          xx +xx  x x",
+"xxxxx+x x      xx  x x",
+"xxxxx+xxx  x x  xx   x",
+"x          x x Sx x  x",
+"xxxxx x  x x x     x x",
+"xxxxxxxxxxxxxxxxxxxxxx",
+]
 
 # with open('maze.txt', 'r') as f:
 #     nBombs = int(f.readline())
@@ -86,15 +107,22 @@ elif type == 3:
     print("include reward? [yes/no]: ")
     s = input()
     if s == "yes":
-        path = ucsPath(maze, start, end, bombs)
+        path = ucsPath(maze, start, end, rewards)
     else:
         path = ucsPath(maze, start, end)
+elif type == 4:
+    print("include reward? [yes/no]: ")
+    s = input()
+    if s == "yes":
+        path = gbfsPath(maze, start, end, rewards)
+    else:
+        path = gbfsPath(maze, start, end)
 else:
     print("include reward? [yes/no]: ")
     s = input()
     if s == "yes":
-        path = gbfsPath(maze, start, end, bombs)
+        path = a_star_algorithm(maze, start, end, rewards)
     else:
-        path = gbfsPath(maze, start, end)
+        path = a_star_algorithm(maze, start, end)
 
-visualize_maze(maze, rewards, start, end, path)
+visualize_maze(maze, bombs, start, end, path)
