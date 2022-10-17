@@ -114,15 +114,15 @@ elif type == 4:
     print("include reward? [yes/no]: ")
     s = input()
     if s == "yes":
-        path = gbfsPath(maze, start, end, rewards)
+        path = gbfsPath(maze, visited, start, end, rewards)
     else:
-        path = gbfsPath(maze, start, end)
+        path = gbfsPath(maze, visited, start, end)
 else:
     print("include reward? [yes/no]: ")
     s = input()
     if s == "yes":
-        path = a_star_algorithm(maze, start, end, rewards)
+        path = aStar(maze, start, end, rewards)
     else:
-        path = a_star_algorithm(maze, start, end)
+        path = aStar(maze, start, end)
 
 visualize_maze(maze, bombs, start, end, path)
