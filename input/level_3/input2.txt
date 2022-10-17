@@ -1,0 +1,15 @@
+5
+1 9
+3 12
+4 2
+6 5
+7 12
+xxxxxxxxxxxxxx
+x        +   x
+x  *         x
+x   xx      +x
+x +      x   x
+xxxxx   xx   x
+x   x+ x     x
+x      xx   +x
+xxxxxxxxx xxxx
