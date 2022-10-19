@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 import os 
 
-def visualize_maze(matrix, bonus, start, end, route=None):
+def visualize_maze(matrix, bonus, start, end, output, route=None):
     """
     Args:
       1. matrix: The matrix read from the input file,
@@ -51,21 +51,29 @@ def visualize_maze(matrix, bonus, start, end, route=None):
          verticalalignment='center')
     plt.xticks([])
     plt.yticks([])
-    plt.show()
-
-    print(f'Starting point (x, y) = {start[0], start[1]}')
-    print(f'Ending point (x, y) = {end[0], end[1]}')
+    plt.savefig(output)
+    # print(f'Starting point (x, y) = {start[0], start[1]}')
+    # print(f'Ending point (x, y) = {end[0], end[1]}')
     
-    for _, point in enumerate(bonus):
-      print(f'Bonus point at position (x, y) = {point[0], point[1]} with point {point[2]}')
+    # for _, point in enumerate(bonus):
+    #   print(f'Bonus point at position (x, y) = {point[0], point[1]} with point {point[2]}')
 
 def read_file(file_name: str = 'maze.txt'):
     f=open(file_name,'r')
     n_bonus_points = int(next(f)[:-1])
     bonus_points = []
     for i in range(n_bonus_points):
-        x, y, reward = map(int, next(f)[:-1].split(' '))
-        bonus_points.append((x, y, reward))
+        inS = f.readline()
+        arg = inS.split(' ')
+        if len(arg) == 3:
+            x, y, reward = map(int, arg)
+            bonus_points.append((x, y, reward))
+        elif len(arg) == 2:
+            x, y = map(int, arg)
+            bonus_points.append((x, y))
+        # elif len(arg) == 4:
+        #     x, y, xx, yy = map(int, arg)
+        #     bonus_points.append((x, y, xx, yy))
 
     text=f.read()
     matrix=[list(i) for i in text.splitlines()]
