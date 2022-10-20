@@ -1,14 +1,15 @@
-from ast import Str
 import os
-from tabnanny import check
-from algo.algo1 import algo1Path
+import time
+from algo.DijkstraPickUpPoint import algo1Path
+from algo.BfsWithTeleport import bfsWithTeleportPath
 from utils.draw_map import *
 from algo.DepthFirstSearch import *
 from algo.BreadthFirstSearch import *
 from algo.UniformCostSearch import *
 from algo.GreedyBestFirstSearch import *
-from algo.ASearch import *
-from algo.algo1 import *
+from algo.AStarSearchH1 import *
+from algo.AStarSearchH2 import *
+from algo.DijkstraPickUpPoint import *
 
 inputDir = ['input/level_1/input1.txt',
             'input/level_1/input2.txt',
@@ -20,7 +21,10 @@ inputDir = ['input/level_1/input1.txt',
             'input/level_2/input3.txt',
             'input/level_3/input1.txt',
             'input/level_3/input2.txt',
-            'input/level_3/input3.txt'
+            'input/level_3/input3.txt',
+            'input/advance/input1.txt',
+            'input/advance/input2.txt',
+            'input/advance/input3.txt',
             ]
 outputDir = [
     'output/level_1/input1/',
@@ -33,71 +37,20 @@ outputDir = [
     'output/level_2/input3/',
     'output/level_3/input1/',
     'output/level_3/input2/',
-    'output/level_3/input3/'
+    'output/level_3/input3/',
+    'output/advance/input1/',
+    'output/advance/input2/',
+    'output/advance/input3/',
 ]
 
-# bombs = [
-# (4,4,-100),
-# (6,17,-10)
-# ]
-
-# # bombs = [
-# #     (3, 6, -10),
-# # (5, 14, -15),
-# # (6, 5 ,-20),
-# # (7, 5, -14),
-# # ]
-
-# # maze = [
-# # "xxxxxxxxxxxxxxxxx xxxxxxxxxxx",
-# # "x                           x",
-# # "x                           x",
-# # "x                           x",
-# # "x   +                       x",
-# # "x                           x",
-# # "x                +          x",
-# # "x                           x",
-# # "x      xxxxxxxx             x",
-# # "x      x      x             x",
-# # "x      x      x             x",
-# # "x                           x",
-# # "x         S                 x",
-# # "x                           x",
-# # "x                           x",
-# # "x                           x",
-# # "x                           x",
-# # "x                           x",
-# # "x                           x",
-# # "xxxxxxxxxxxxxxxxxxxxxxxxxxxxx"]
-
-# # maze = [
-# # "xxxxxxxxxxxxxxxxxxxxxx",
-# # "x   x   xx xx        x",
-# # "      x     xxxxxxxxxx",
-# # "x x   +xx  xxxx xxx xx",
-# # "x x   x x xx   xxxx  x",
-# # "x          xx +xx  x x",
-# # "xxxxx+x x      xx  x x",
-# # "xxxxx+xxx  x x  xx   x",
-# # "x          x x Sx x  x",
-# # "xxxxx x  x x x     x x",
-# # "xxxxxxxxxxxxxxxxxxxxxx",
-# # ]
-
-# # with open('maze.txt', 'r') as f:
-# #     nBombs = int(f.readline())
-# #     for i in range(nBombs):
-# #         x, y, value = [int(x) for x in next(f).split()]
-# #         bombs.append((x, y, value))
-# #     for line in f.readlines():
-# #         maze.append(line)
-
-# level 1
-
-dirType = ['bfs', 'dfs', 'ucs', 'greedyBFS', 'aStar', 'algo1']
+dirType = ['bfs', 'dfs', 'ucs', 'greedyBFS', 'aStar', 'dijkstraPickUpPoint', 'bfsWithTeleport']
 
 def algoSolve(type, output, dir, maze, visited, start, end, rewards=[]):
     bombs = rewards.copy()
+    newDir = output + dir
+    if not(os.path.isdir(newDir)):
+        os.mkdir(newDir)
+    sTime = time.time()
     if type == 1:
         path, cost = bfsPath(maze, visited, start, end)
     elif type == 2:
@@ -111,16 +64,29 @@ def algoSolve(type, output, dir, maze, visited, start, end, rewards=[]):
     elif type == 7:
         path, cost = gbfsPath(maze, visited, start, end, rewards)
     elif type == 5:
-        path, cost = aStar(maze, start, end)
+        path, cost = aStarh1(maze, start, end)
     elif type == 8:
-        path, cost = aStar(maze, start, end, rewards)
+        path, cost = aStarh1(maze, start, end, rewards)
+        f = open(newDir + '/aStar_heuristic_1.txt','w+')  
+        f.write(str(cost) if cost != 0 else 'NO')
+        f.close()
+        visualize_maze(maze, bombs, start, end, newDir + '/aStar_heuristic_1.jpg', path)
+
+        path, cost = aStarh2(maze, start, end, rewards)
+        f = open(newDir + '/aStar_heuristic_2.txt','w+')  
+        f.write(str(cost) if cost != 0 else 'NO')
+        f.close()
+        visualize_maze(maze, bombs, start, end, newDir + '/aStar_heuristic_2.jpg', path)
+        return
     elif type == 9:
         path, cost = algo1Path(maze, visited, start, end, rewards)
-    newDir = output + dir
-    if not(os.path.isdir(newDir)):
-        os.mkdir(newDir)
-    f = open(newDir + '/{}.txt'.format(dir),'w+')  # w : writing mode  /  r : reading mode  /  a  :  appending mode
-    f.write(str(cost) if cost != 0 else 'NO')
+    elif type == 10:
+        path, cost = bfsWithTeleportPath(maze, visited, start, end, rewards)
+        bombs = []
+    eTime = time.time()
+    total = eTime - sTime
+    f = open(newDir + '/{}.txt'.format(dir),'w+')  
+    f.write('{0}\n{1}'.format(str(cost) if cost != 0 else 'NO', total))
     f.close()
     visualize_maze(maze, bombs, start, end, newDir + '/{}.jpg'.format(dir), path)
 
@@ -151,6 +117,9 @@ def solve(input, output, level):
             algoSolve(i+4, output, dirType[i], maze, visited, start, end, bombs)
     elif level == 3:
         algoSolve(9, output, dirType[5], maze, visited, start, end, bombs)
+    elif level == 4:
+        algoSolve(10, output, dirType[6], maze, visited, start, end, bombs)
+
 
 #create folder
 
@@ -158,13 +127,11 @@ def makeOutputFolder(root,outputDir:str):
     tmp_dir = './{}'.format(root)+'/'
     if (not os.path.isdir(tmp_dir)):
         os.mkdir(tmp_dir)
-        # print('root:',tmp_dir)
     list_child = outputDir.split("/")
     for child in list_child:
         tmp_dir = tmp_dir + child +'/'
         if not os.path.isdir(tmp_dir):
             os.mkdir(tmp_dir)
-            # print(tmp_dir)
             
 
 for dir in outputDir:
@@ -177,3 +144,5 @@ for i in range(len(inputDir)):
         solve(inputDir[i],'./' + outputDir[i], 2)
     elif i < 11:
         solve(inputDir[i],'./' + outputDir[i], 3)
+    else:
+        solve(inputDir[i],'./' + outputDir[i], 4)
